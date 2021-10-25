@@ -443,3 +443,44 @@ public class SampleService {
 
 ==============
 
+
+
+interface EmployeeDao {
+	void addEmployee(Employee e);
+}
+
+@Repository
+public class EmployeeDaoJdbcImpl implements EmployeeDao {
+	void addEmployee(Employee e) {..}	
+}
+
+
+@Repository
+public class EmployeeDaoMongoImpl implements EmployeeDao {
+	void addEmployee(Employee e) {..}	
+}
+
+@Service
+public class SampleService {
+	@Autowired
+	EmployeeDao empDao;
+	 
+	public void doAdd(Employee e) {
+		empDao.addEmployee(e);
+	}
+}
+
+=========================================
+
+Java Build Tool ==> Maven
+
+ANT ==> build.xml [ target as clean, compile, package, jar files...]
+
+Maven is a build tool ==> Main features manage dependencies; configure lifecycle management of applicaiton; uses pom.xml as configuration file; uses XML language
+
+Gradle is a build tool similar to Maven uses "groovy" language
+
+=============
+
+
+
