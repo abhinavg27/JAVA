@@ -543,6 +543,40 @@ VM arguments
 
 -Dspring.profiles.active=prod
 
-====================================
+=======================================================
 
+* JDBC is an integration aPI to interact with Relational Database [ RDBMS ]
+
+ORM framework
+* Object Relational Mapping to simplify CRUD operations on top of JDBC
+
+* Hibernate ==> JBoss ==> RedHat
+* TopLink ==> Oracle
+* KODO ==> BEA ==> Oracle
+* JDO ==> Sun MS ==> Oracle
+* OpenJPA ==> Apache
+* EclipseLink ==> eclipse
+
+JPA ==> Java Persistence API is a specification for ORM 
+
+Building Blocks of ORM
+1) DataSource
+2) EntityManagerFactory
+3) PersistenceContext
+4) EntityManager
+
+
+
+Within a persistence context, entities are managed within this environmet. 
+The EntityManager controls their lifecycle, and they can access datastore resources.
+
+* Primary KEY is AUTO INCREMENT; no need to pass it from application
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
+===
+* Primary key is assigned from Application
+	@Id
+	private int id;
 
