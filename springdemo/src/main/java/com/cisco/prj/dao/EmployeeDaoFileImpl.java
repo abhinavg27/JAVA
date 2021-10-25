@@ -5,13 +5,14 @@ import org.springframework.stereotype.Repository;
 
 import com.cisco.prj.entity.Employee;
 
-	@Profile("prod")
-	@Repository
-	public class EmployeeDaoJdbcImpl implements EmployeeDao {
+
+@Profile("dev")
+@Repository
+public class EmployeeDaoFileImpl implements EmployeeDao {
 
 	@Override
 	public void addEmployee(Employee e) {
-		System.out.println("stored in database!!!");
+		System.out.println("file store!!!");
 	}
 
 }

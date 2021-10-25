@@ -18,6 +18,11 @@ public class SpringExample {
 		Employee e = new Employee();
 		service.storeEmp(e);
 		
+//		String[] names = ctx.getBeanDefinitionNames();
+//		for(String name : names) {
+//			System.out.println(name);
+//		}
+		
 	}
 
 }

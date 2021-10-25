@@ -483,4 +483,66 @@ Gradle is a build tool similar to Maven uses "groovy" language
 =============
 
 
+ApplicationContext is an interface for Spring Container.
+
+* ApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
+
+* new AnnotationConfigApplicationContext();
+
+
+====
+Problem: more than 1 bean of a giver interface to be wired
+Caused by: org.springframework.beans.factory.NoUniqueBeanDefinitionException: No qualifying bean of type 'com.cisco.prj.dao.EmployeeDao' available: expected single matching bean but found 2: employeeDaoFileImpl,employeeDaoJdbcImpl
+
+Solutions:
+1) Mark one of the bean as @Primary
+
+@Primary
+@Repository
+public class EmployeeDaoJdbcImpl implements EmployeeDao {
+
+
+@Repository
+public class EmployeeDaoFileImpl implements EmployeeDao {
+
+2) use @Qualifier
+
+@Repository
+public class EmployeeDaoJdbcImpl implements EmployeeDao {
+
+@Repository
+public class EmployeeDaoFileImpl implements EmployeeDao {
+
+
+@Service
+public class AppService {
+	@Autowired
+	@Qualifier("employeeDaoJdbcImpl")
+	private EmployeeDao empDao;
+
+3) using VM / Program arguments and @Profile
+
+@Service
+public class AppService {
+	@Autowired
+	private EmployeeDao empDao;
+
+
+@Profile("dev")
+@Repository
+public class EmployeeDaoFileImpl implements EmployeeDao {
+
+@Profile("prod")
+@Repository
+public class EmployeeDaoJdbcImpl implements EmployeeDao {
+
+
+Run As ==> Run Configurations
+Arguments:
+VM arguments
+
+-Dspring.profiles.active=prod
+
+====================================
+
 
