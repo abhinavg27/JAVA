@@ -246,5 +246,200 @@ public class Test {
   private static void lambda$main$0();
 }
 
-=================
+===============================
+
+Lambda
+
+(parameter) -> body
+
+Many FunctionalInterfaces in Java 8, few are listed below:
+
+1) Function [  R apply(T t); ]
+
+Function<Integer, String> f = (x) -> "Hello " + x;
+
+f.apply(5); returns "Hello 5"
+
+2) BiFunction [  R apply(T t, U u); ]
+
+3) Predicate [  boolean test(T t); ]
+
+4) Consumer [   void accept(T t); ]
+
+5) Runnable [ void run() ]
+
+6) Comparator [ int compare (T o1, T o2)]
+
+============================
+
+OOP --> has methods which are tightly coupled to state of object
+
+public class Account {
+	private double balance; //state
+
+	public void credit(double amt) {
+		balance += amt;
+	}
+
+	public double getBalance() {
+		return balance;
+	}
+}
+
+Functional style of programming ==> functionalities which can be used on any object
+Functional style uses high order function [ which accept or return a function]
+* treat functions as first class members like objects / primitive
+
+Commonly used HOF are:
+1) filter [ returns a subset based on predicate function]
+2) map [ transforms the data based on Function]
+3) reduce [ aggregate function]
+4) forEach [ consume every element and write to console / Network / database]
+5) limit
+6) skip
+7) flatMap
+...
+
+https://rxmarbles.com/
+
+Java 8 streams;
+
+The above mentioned HOF work on stream; Stream is a channel along which data flows [ Collection / Network/ R2DBC / MongoDB]
+ 
+ double sum = products.stream()
+			.map(p -> p.getPrice())
+			.reduce(0.0, (v1, v2) -> v1 + v2);
+
+reduce(indentity, accumulator)
+  T result = identity;
+           for (T element : this stream)
+               result = accumulator.apply(result, element)
+           return result;
+
+===================================
+
+Spring Framework + JPA
+
+SOLID Design Principle
+S ==> Single Responsibility 
+O ==> Open Close Principle [ Closed for chanage; open for extension]
+L ==> Liskov Substition principle
+I ==> Interface segregation
+D ==> Dependency Injection
+
+
+What is Spring Framework?
+* provides Lightweight container which manages life-cycle of objects and depency injection in its core module.
+* has many more module for EAI ==> Enterprise application integration [ database , NoSQL, Redis, JMS, EmailService, ..] ==> lots of templates are avaibles which make application development easy.
+
+Guice (pronounced 'juice') is a lightweight dependency injection framework 
+
+============================================
+
+Spring framework uses XML or annotation as metadata for life-cycle of objects and depency injection
+
+1) XML as metadata
+
+interface EmployeeDao {
+	void addEmployee(Employee e);
+}
+
+public class EmployeeDaoJdbcImpl implements EmployeeDao {
+	void addEmployee(Employee e) {..}	
+}
+
+public class SampleService {
+	EmployeeDao empDao;
+	public SampleService(EmployeeDao empDao) {
+		this.empDao = empDao;
+	}
+
+	public void doAdd(Employee e) {
+		empDao.addEmployee(e);
+	}
+}
+
+beans.xml
+<beans id="jdbc" class="pkg.EmployeeDaoJdbcImpl" />
+<beans id="service" class="pkg.SampleService">
+	<constuctor index="0" ref="jdbc" />
+</beans>
+
+====================
+
+
+
+interface EmployeeDao {
+	void addEmployee(Employee e);
+}
+
+public class EmployeeDaoJdbcImpl implements EmployeeDao {
+	void addEmployee(Employee e) {..}	
+}
+
+public class EmployeeDaoMongoDbImpl implements EmployeeDao {
+	void addEmployee(Employee e) {..}	
+}
+
+public class SampleService {
+	EmployeeDao empDao;
+
+	public void setDao(EmployeeDao empDao) {
+		this.empDao = empDao;
+	}
+	public void doAdd(Employee e) {
+		empDao.addEmployee(e);
+	}
+}
+
+beans.xml
+<beans id="jdbc" class="pkg.EmployeeDaoJdbcImpl" />
+<beans id="mongo" class="pkg.EmployeeDaoMongoDbImpl" />
+
+<beans id="service" class="pkg.SampleService">
+	<property name ="dao" ref="jdbc" />
+</beans>
+
+<property name ="dao" ref="jdbc" /> ==> setDao(jdbc);
+
+===============================================================
+
+Annotation as Metadata:
+Spring creates instances of classes which has one of these annotations:
+1) @Component
+==> Untilty class / Helper
+2) @Repository
+==> DAO layer ==> interact with persistent Store
+3) @Service
+==> Service tier which is Transactional
+4) @Controller
+==> Traditional web application development
+5) @RestController
+==> RESTful Web Services
+6) @Configuration
+==> reading properties file and any custom configuration for applicaiton
+
+Wiring is done using @Autowired annotation
+
+
+interface EmployeeDao {
+	void addEmployee(Employee e);
+}
+
+@Repository
+public class EmployeeDaoJdbcImpl implements EmployeeDao {
+	void addEmployee(Employee e) {..}	
+}
+
+@Service
+public class SampleService {
+	@Autowired
+	EmployeeDao empDao;
+	 
+	public void doAdd(Employee e) {
+		empDao.addEmployee(e);
+	}
+}
+
+==============
 
