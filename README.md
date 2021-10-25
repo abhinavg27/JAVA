@@ -50,5 +50,201 @@ mysql> exit
 
 ==========
 
+Java 8 features
+* Generic collection
+* Lambda expression
+* Java 8 stream
 
+Spring Framework
+Java Persistence API
+Buidling Traditional Web application
+
+Spring Boot 
+Building Secure RESTful Web services
+
+--------------------------------------
+
+
+
+Collection API ==> Data Containers provided by Java ==> Java Collection Framework
+
+Generics:
+
+class Rectangle <T> { ==> class Rectangle {
+	T width;					Object width;
+	T breadth;					Object breadth;
+
+
+}							}
+
+
+Rectangle<Integer> r1 = new Rectangle<>(4, 5); T is treated as Integer
+
+
+Integer is a type wrapper class for "int" primitive type
+
+int x = 10;
+
+Integer iX = x; // autoboxing
+
+int y = iX; // unboxing
+
+
+Rectangle<Double> r2 = new Rectangle<>(4.2, 1.5); T is treated as Double
+
+Rectangle<String> r3 = new Rectangle<>("A", "B");
+
+Rectangle<String> r3 = new Rectangle<String>("A", "B");
+
+
+
+
+class Rectangle <T extends Number> { 		==> class Rectangle {
+	T width;										Number width;
+	T breadth;										Number breadth;
+
+
+}									}
+
+
+Rectangle<String> r3 = new Rectangle<String>("A", "B");// error
+
+===============================
+
+
+Object[] elems = new String[3]; // valid
+
+List<Object> list = new ArrayList<String>(); // error
+
+
+class Product {
+
+}
+
+class Tv extends Product {
+
+}
+
+Object o = new Product();
+Object o = new Tv();
+Product p = new Tv();
+
+List<?> is refered as unkonow type; can access any type of collection; mutation is not allowed
+
+If T is Tv
+
+List<? super T> dest
+
+dest can be Tv, Product or Object
+
+If <T> is Product
+
+List<? extends T> meaining it can be Product or Tv
+
+
+====================
+
+	private static <T> void copy(List<T> dest, List<T> src) {
+		for(T obj : src) {
+			dest.add(obj);
+		}
+	}
+
+	// PECS ==> Producer extends Consumer Super
+
+	private static <T> void copy(List<? super T> dest, List<? extends T> src) {
+		for(T obj : src) {
+			dest.add(obj);
+		}
+	}
+
+=====================
+
+
+Functional Interface and Lambda expression
+
+Anonymous class
+
+interface Flyable {
+	void fly();
+}
+
+Flyable f = new Flyable(); // error
+
+"f" is an object of anonymous class
+Flyable f = new Flyable() {
+	public void fly() {
+		...
+	}
+};
+
+class Bird implements Flyable {
+	// state
+	// behaviour
+	public void fly() {
+		...
+	}
+	
+}
+
+Flyable f = new Bird();
+
+
+Dummy1.java
+Dummy2.java
+
+Metaspace
+
+===
+
+Test.java
+
+public class Test {
+  public static void main(String[] args) {
+     // r is an object of anonymous class
+     Runnable r = new Runnable() {
+        public void run() {
+	
+        }
+    };
+  }
+}
+
+javap -p Test.class
+Compiled from "Test.java"
+public class Test {
+  public Test();
+  public static void main(java.lang.String[]);
+}
+
+
+javap -p Test$1.class
+Compiled from "Test.java"
+class Test$1 implements java.lang.Runnable {
+  Test$1();
+  public void run();
+}
+
+==========================
+
+
+FunctionalInterface is an interface where only one method of it has to be defined.
+
+
+public class Test {
+  public static void main(String[] args) {
+     // r is an object of anonymous class
+     Runnable r = () -> {    };
+  }
+}
+
+javap -p Test.class
+Compiled from "Test.java"
+public class Test {
+  public Test();
+  public static void main(java.lang.String[]);
+  private static void lambda$main$0();
+}
+
+=================
 
