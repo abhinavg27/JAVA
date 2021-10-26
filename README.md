@@ -920,3 +920,78 @@ public class Customer {
 ==================
 
 
+Many-to-Many ==> OneToMany and ManyToOne with association table
+
+1) Project and Employee looks like ManyToMany [ Project has many employees; Employee works in many Project]
+
+======================
+
+Mapping Inheritance:
+1) Single Table 
+
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "product_type")
+public abstract class Product {
+		@Id
+		private int id;
+		private String name;
+		private double price;
+
+}
+
+@Entity
+@DiscriminatorValue("tv")
+public class Tv extends Product {
+	@Column(name="screen_type")
+	String screenType;
+}
+
+
+@Entity
+@DiscriminatorValue("mobile")
+public class Mobile extends Product {
+	String connectivity;
+}
+
+--
+
+2) Table per class
+
+
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class Product {
+		@Id
+		private int id;
+		private String name;
+		private double price;
+
+}
+
+@Entity
+public class Tv extends Product {
+	@Column(name="screen_type")
+	String screenType;
+}
+
+
+@Entity
+public class Mobile extends Product {
+	String connectivity;
+}
+
+========================================================
+
+Task:
+
+1) Start new Spring applicaton ==> pom.xml
+2) create 2 entites "Employee" and "Ticket"
+
+1) Use case 1:
+Employee raises a ticket
+
+2) Use case 2:
+Employee resolves a ticket
+
+refer: 2. task.svg
