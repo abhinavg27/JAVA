@@ -764,4 +764,159 @@ http://www.databaseanswers.org/data_models/index.htm
 Mapping Associations 
 
 
-Resume @ 2:00
+Many-To-one JoinColumn will introduce FK in owning side
+
+One-To-Many JoinColumn will introduce FK in child side
+
+==========
+
+Without Cascade:
+
+@Entity
+@Table(name="orders")
+public class Order {
+	@OneToMany
+	@JoinColumn(name="order_fk")
+	private List<Item> items = new ArrayList<>(); // order has many items
+
+Assume Order has 4 items;
+
+1) to save 
+orderDao.save(order);
+itemDao.save(i1);
+itemDao.save(i2);
+itemDao.save(i3);
+itemDao.save(i4);
+
+2) to delete
+orderDao.delete(oid);
+itemDao.delete(id1);
+itemDao.delete(id2);
+itemDao.delete(id3);
+itemDao.delete(id4);
+
+
+With Cascade:
+
+@Entity
+@Table(name="orders")
+public class Order {
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="order_fk")
+	private List<Item> items = new ArrayList<>(); // order has many items
+
+
+Assume Order has 4 items;
+
+1) to save 
+orderDao.save(order); 
+
+saving an order saves items also
+ 
+
+2) to delete
+orderDao.delete(oid);
+delte order deletes items also
+
+==> No need for ItemDao
+
+============
+
+Fetch Strategy
+
+1) ManyToOne is EAGER fetching 
+2) OneToMany is LAZY fetching
+
+orderDao.getOrder(1);
+this fetches order entry and customer also
+
+override strategy using:
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name="order_fk")
+	private List<Item> items = new ArrayList<>(); // order has many items
+	
+===
+
+Dirty checking is the capability of ORM ==> within a transactional code if object becomes dirty ==> update SQL is sent
+
+----------------
+
+Fetch EAGER:
+    select
+        order0_.oid as oid1_2_0_,
+        order0_.customer_fk as customer4_2_0_,
+        order0_.order_date as order_da2_2_0_,
+        order0_.total as total3_2_0_,
+        customer1_.email as email1_0_1_,
+        customer1_.first_name as first_na2_0_1_,
+        customer1_.last_name as last_nam3_0_1_,
+        items2_.order_fk as order_fk5_1_2_,
+        items2_.itemid as itemid1_1_2_,
+        items2_.itemid as itemid1_1_3_,
+        items2_.amount as amount2_1_3_,
+        items2_.product_fk as product_4_1_3_,
+        items2_.qty as qty3_1_3_,
+        product3_.id as id1_3_4_,
+        product3_.name as name2_3_4_,
+        product3_.price as price3_3_4_,
+        product3_.qty as qty4_3_4_ 
+    from
+        orders order0_ 
+    left outer join
+        customers customer1_ 
+            on order0_.customer_fk=customer1_.email 
+    left outer join
+        items items2_ 
+            on order0_.oid=items2_.order_fk 
+    left outer join
+        products product3_ 
+            on items2_.product_fk=product3_.id 
+    where
+        order0_.oid=?
+
+ ----------------------
+
+ Fetch LAZY:
+
+ select
+        order0_.oid as oid1_2_0_,
+        order0_.customer_fk as customer4_2_0_,
+        order0_.order_date as order_da2_2_0_,
+        order0_.total as total3_2_0_,
+        customer1_.email as email1_0_1_,
+        customer1_.first_name as first_na2_0_1_,
+        customer1_.last_name as last_nam3_0_1_ 
+    from
+        orders order0_ 
+    left outer join
+        customers customer1_ 
+            on order0_.customer_fk=customer1_.email 
+    where
+        order0_.oid=?
+
+ -----------------------------
+
+
+ Bi-Directional relationship:
+
+
+@Entity
+@Table(name="orders")
+public class Order {
+
+	@ManyToOne()
+	@JoinColumn(name="customer_fk")
+	private Customer customer; // order is by customer
+
+
+----
+
+@Entity
+@Table(name="customers")
+public class Customer {
+		@OneToMany(mappedBy = "customer")
+		private List<Order> orders = new ArrayList<>();
+
+==================
+
+
