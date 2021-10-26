@@ -6,8 +6,8 @@ import org.springframework.stereotype.Repository;
 import com.cisco.prj.entity.Employee;
 
 
-@Profile("dev")
-@Repository
+//@Profile("dev")
+//@Repository
 public class EmployeeDaoFileImpl implements EmployeeDao {
 
 	@Override

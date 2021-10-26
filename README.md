@@ -713,12 +713,15 @@ public void transferFunds(Account fromAcc, Account toAcc, double amt) {
 2) Programatic Transaction using Hibernate
 
 
-public void transaferFunds(Account fromAcc, Account toAcc, double amt) {
+public void transferFunds(Account fromAcc, Account toAcc, double amt) {
   Session ses = sessionFactory.getSession();
 	try {
 		Transaction tx = ses.beginTransaction();
 	 	ses.update(fromAcc);
 	 	ses.update(toAcc);
+	 	ses.save(txinfo);
+	 	send sms;
+	 	send email
 		tx.commit();
 	} catch(SQLException ex) {
 		tx.rollback();
@@ -734,3 +737,17 @@ public void transferFunds(Account fromAcc, Account toAcc, double amt) {
 }
 
 if exception is propagated out of the method "rollback" else "commit"
+
+=======================================================
+
+Service facade a layer on DAO operations; 
+Normally combine many fine grained operations of DAO as one atomic unit of operation which is coarse grained.
+Service code should be transactional instead of DAO code.
+
+==========================================
+
+https://github.com/spring-projects/spring-framework/blob/main/spring-jdbc/src/main/resources/org/springframework/jdbc/support/sql-error-codes.xml
+
+
+
+ 

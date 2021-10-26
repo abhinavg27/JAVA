@@ -11,10 +11,12 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 	
 @Configuration
+@EnableTransactionManagement
 public class AppConfig {
 	
 	@Bean
@@ -35,10 +37,11 @@ public class AppConfig {
 		LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
 		emf.setDataSource(ds);
 		emf.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+		emf.setPackagesToScan("com.cisco.prj.entity");
 		
 		Properties props = new Properties();
 		props.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect"); // ORM to generate SQL to compatable to MySql8
-		props.setProperty("hibernate.ddl-auto", "update");
+		props.setProperty("hibernate.hbm2ddl.auto", "update");
 		props.setProperty("hibernate.show_sql", "true");
 		props.setProperty("hibernate.format_sql", "true");
 		emf.setJpaProperties(props);

@@ -1,11 +1,10 @@
 package com.cisco.prj.dao;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import com.cisco.prj.entity.Employee;
 
-	@Profile("prod")
+//	@Profile("prod")
 	@Repository
 	public class EmployeeDaoJdbcImpl implements EmployeeDao {
 
