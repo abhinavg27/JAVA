@@ -649,3 +649,88 @@ of those classes to be managed by Spring container
 
 
 Solution: use factory pattern
+
+===
+
+EmailService.java
+MyConfig.java
+AppService.java
+
+
+=======================
+
+Once MySQL container on docker is up and running
+
+access MySQL terminal
+
+$ docker exec -it local-mysql bash
+
+# mysql -u root -p
+Enter Password: Welcome123
+
+
+mysql> create database CISCO_SPRING;
+mysql> use CISCO_SPRING;
+
+==============
+
+
+ddl-auto
+
+Hibernate property values are: create, update, create-drop, validate and none:
+props.setProperty("hibernate.ddl-auto", "create");
+create – Hibernate first drops existing tables, then creates new tables
+
+props.setProperty("hibernate.ddl-auto", "update");
+update – uses existing table or creates a new one if not available; alter table if required.
+
+validate – Hibernate only validates whether the tables and columns exist, otherwise it throws an exception
+none – this value effectively turns off the DDL generation
+
+
+
+====
+
+TransactionManager
+
+1) Programatic Transaction using JDBC
+
+public void transferFunds(Account fromAcc, Account toAcc, double amt) {
+	Connection con = ...
+	try {
+		con.setAutoCommit(false); 
+		PreparedStatement ps1 = "update fromAcc ...";
+		PreparedStatement ps2= "update toAcc ...";
+		ps1.executeUpdate();
+		ps2.executeUpdate();
+		con.commit();
+	} catch(SQLException ex) {
+		con.rollback();
+	}
+}
+
+
+2) Programatic Transaction using Hibernate
+
+
+public void transaferFunds(Account fromAcc, Account toAcc, double amt) {
+  Session ses = sessionFactory.getSession();
+	try {
+		Transaction tx = ses.beginTransaction();
+	 	ses.update(fromAcc);
+	 	ses.update(toAcc);
+		tx.commit();
+	} catch(SQLException ex) {
+		tx.rollback();
+	}
+}
+
+
+3) Declarative Tranasaction using PlatformTransactionManager
+
+@Transactional
+public void transferFunds(Account fromAcc, Account toAcc, double amt) {
+	// jdbc or hiberante or jpa or jta
+}
+
+if exception is propagated out of the method "rollback" else "commit"
