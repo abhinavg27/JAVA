@@ -580,3 +580,72 @@ The EntityManager controls their lifecycle, and they can access datastore resour
 	@Id
 	private int id;
 
+===================================
+
+
+Recap:
+1) Generic Collections using of <?> and <T>
+	Generic class , Generic methods
+2) Functional Style of Programming; @FunctionalInterface, HOF
+3) java 8 streams [ map, filter, reduce, forEach, collect]
+4) Spring Framework 5.2 version ==> Core Container provides DI and life cycle management
+XML based metadata and annotaion based metadata;
+@Component, @Repository, @Service, @Configuration, @Controller, @RestController
+@Autowired ==> to wire dependencies
+@Primary, @Qualifier, @Profile with VM arguments -Dspring.profiles.active=prod
+
+5) ORM, EntityManagerFactory, PersistenceContext and EntityManager
+6) @Entity, @Table, @Id, @Column
+
+
+
+BiFunction<Integer,Integer,Integer> bifn = (x,y) -> x + y;
+
+
+int x = bifn.apply(4,5); // 9
+
+
+BiFunction<Integer,Double,String> bifn2 = (x, y) -> "Result " + (x +y);
+
+String str - bifn2.apply(4, 1.2); // "Result 5.2"
+
+==================================
+
+
+Day 2
+
+Spring creates instances of class using default constructor and it needs one of "6" annotations mentioned
+
+case 1:
+
+class without default constructor
+
+public class EmailService {
+	private String ip;
+	private int port;
+
+	public EmailService(String ip, int port) {
+		...
+	}
+
+	public void sendEmail(String msg) {
+
+	}
+}
+
+placing any of the "6" annotations on top of this class will lead to Spring initialization error
+
+
+case 2:
+
+class are provided by 3rd party libraries which doesn't have any of the above annotations; but we need objects
+of those classes to be managed by Spring container
+
+2.1) jackson library ObjectMapper
+	java <--> json
+
+		JAXB
+		java <--> XML
+
+
+Solution: use factory pattern

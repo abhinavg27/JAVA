@@ -11,8 +11,12 @@ public class AppService {
 	@Autowired
 	private EmployeeDao empDao;
 	
+	@Autowired
+	private EmailService emailService;
+	
 	public void storeEmp(Employee e) {
 		empDao.addEmployee(e);
+		emailService.sendEmail(e.getName() + " added to database!!!");
 	}
 }
 

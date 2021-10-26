@@ -15,7 +15,7 @@ public class SpringExample {
 		
 		AppService service = ctx.getBean("appService", AppService.class);
 		
-		Employee e = new Employee();
+		Employee e = new Employee("sam@cisco.com", "Sam");
 		service.storeEmp(e);
 		
 //		String[] names = ctx.getBeanDefinitionNames();
