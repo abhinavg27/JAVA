@@ -1,11 +1,13 @@
 package com.cisco.prj.client;
 
+import java.util.List;
+
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import com.cisco.prj.entity.Product;
+import com.cisco.prj.entity.Customer;
 import com.cisco.prj.service.OrderService;
 
-public class InsertProductClient {
+public class CustomerClient {
 
 	public static void main(String[] args) {
 		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
@@ -15,10 +17,18 @@ public class InsertProductClient {
 		
 		OrderService service = ctx.getBean("orderService", OrderService.class);
 		
-		Product p = new Product(0, "HP Laptop", 135000.00, 100);
-		service.addProduct(p);
-		System.out.println("product added!!!");
-	
+		Customer c1 = new Customer("harry@cisco.com", "Harry" , "Potter");
+		Customer c2 = new Customer("gavin@cisco.com", "Gavin" , "King");
+		
+		service.addCustomer(c1);
+		service.addCustomer(c2);
+		
+		List<Customer> customers = service.getCustomers();
+		for(Customer c: customers) {
+			System.out.println(c.getEmail() +", " + c.getFirstName());
+		}
+				
+
 	}
 
 }
