@@ -757,4 +757,11 @@ OrderService.java
 CustomerClient.java
 
 
- 
+=========================================================
+
+http://www.databaseanswers.org/data_models/index.htm
+
+Mapping Associations 
+
+
+Resume @ 2:00
