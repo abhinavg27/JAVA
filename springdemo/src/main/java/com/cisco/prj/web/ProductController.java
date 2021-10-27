@@ -2,6 +2,7 @@ package com.cisco.prj.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -13,7 +14,10 @@ import com.cisco.prj.service.OrderService;
 public class ProductController {
 	@Autowired
 	private OrderService service;
-	
+
+	@Autowired
+	private ProductValidator validator;
+
 	@RequestMapping("getProducts.do")
 	public ModelAndView getProducts() {
 		ModelAndView mav = new ModelAndView();
@@ -21,7 +25,7 @@ public class ProductController {
 		mav.setViewName("print.jsp");
 		return mav;
 	}
-	
+
 	@RequestMapping("productForm.do")
 	public ModelAndView getProductForm() {
 		ModelAndView mav = new ModelAndView();
@@ -29,13 +33,18 @@ public class ProductController {
 		mav.setViewName("productInput.jsp");
 		return mav;
 	}
-	
+
 	@RequestMapping("addProduct.do")
-	public ModelAndView addProduct(@ModelAttribute("product") Product p) {
+	public ModelAndView addProduct(@ModelAttribute("product") Product p, BindingResult errors) {
 		ModelAndView mav = new ModelAndView();
-		service.addProduct(p);
-		mav.addObject("msg", "Product added!!!");
-		mav.setViewName("index.jsp");
+		validator.validate(p, errors);
+		if (errors.hasErrors()) {
+			mav.setViewName("productInput.jsp");
+		} else {
+			service.addProduct(p);
+			mav.addObject("msg", "Product added!!!");
+			mav.setViewName("index.jsp");
+		}
 		return mav;
 	}
 }

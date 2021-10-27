@@ -1146,7 +1146,61 @@ jetty:run
 
 ===================
  
- 
+ JSTL (JSP Standard Tag Library)
+The JSP Standard Tag Library (JSTL) represents a set of tags to simplify the JSP development.
+
+Core Tags:
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
+
+Adding Validation to Web Application
+
+===========
+
+i18N ==> Internationalization
+
+messages.properties
+name.required=Provide Name, can't be Blank
+price.invalid=:-( Negative value is not valid for price 
+
+
+messages_fr.properties
+name.required= ..
+price.invalid= ..
+
+messages_hi.properties
+
+name.required= ..
+price.invalid= ..
+
+messages_ar.properties
+
+name.required= ..
+price.invalid= ..
+
+
+Browser ==> locale setting is "arabic" searches for "messages_ar.properties" if not present uses "messages.properties"
+
+==============================
+
+
+CustomerController ==> add and list customers
+
+==========================
+
+
+
+Help ==> Eclipse Market Place
+
+search for STS "GO"
+
+install Spring Tools 4 any latest avaiable
+
+=================================================
+
+
+
+
+
 
 
 
