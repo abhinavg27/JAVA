@@ -995,3 +995,63 @@ Employee raises a ticket
 Employee resolves a ticket
 
 refer: 2. task.svg
+
+
+===============================
+
+Day 2 Recap:
+
+Mapping associations:
+one-to-many 
+many-to-one
+
+@JoinColumn() ==> Foreign Key
+
+OneToOne
+ManyToMany
+
+Inheritance:
+single table with discriminator column [ type ==> tv, mobile , "microwave"]
+JOINED 
+Products table ==> common fields
+tv table
+mobile table
+
+DataSource, EntityManager, PeristenceContext, EntityManagerFactory,
+
+DirtyChecking
+
+
+
+Day 3
+
+-------
+Default package is jar
+mvn package
+
+OR
+
+Run As => Maven Build 
+Goals:
+package
+
+----------
+pom.xml
+<packaging>war</packaging>
+
+Maven => update project ==> Check force update
+
+WAR ==> Web Archive ==> Web based applications are bundeled as "war" files and deployed on server
+
+==
+
+<packaging>pom</packaging>
+Parent Maven Project
+
+<packaging>ear</packaging> 
+Enterprise applicaiton ==> Distributed computing , EJB
+
+===================
+
+
+
