@@ -8,6 +8,9 @@
 </head>
 <body>
 	<h1>Spring Demo Application</h1>
+	<div>${msg}</div>
 	<a href="greeting.do">Greetings</a> <br />
+	<a href="getProducts.do">Get Products</a> <br />
+	<a href="productForm.do">Add Product</a>
 </body>
 </html>
