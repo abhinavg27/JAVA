@@ -1197,10 +1197,249 @@ install Spring Tools 4 any latest avaiable
 
 =================================================
 
+ 
+Spring Framework and ORM framework [ Hibernate]
+
+Spring + ORM with JPA integration + Spring MVC 
+
+Spring Core
+Spring ORM
+Spring Transaction
+Spring WebMVC
+
+===================================================
+
+Spring Boot
+
+Spring Boot is a project that is built on the top of the Spring Framework.
+Spring Boot makes it easy to create stand-alone, production-grade Spring based Applications that you can "just run".
+
+Spring Boot is higly opinated framework on top of Spring which configures requirements out-of-the box
+
+* Spring integrate with JPA
+1) Spring boot configures HikariCP as datasource ==> Connection pool to database
+Below Code is Not required:
+@Bean
+	public DataSource dataSource() throws PropertyVetoException  {
+		ComboPooledDataSource cpds = new ComboPooledDataSource();
+		cpds.setDriverClass( "com.mysql.cj.jdbc.Driver" ); //loads the jdbc driver            
+		cpds.setJdbcUrl( "jdbc:mysql://localhost:3306/CISCO_SPRING" );
+		cpds.setUser("root");                                  
+		cpds.setPassword("Welcome123");                                  
+		cpds.setMinPoolSize(5);                                     
+		cpds.setAcquireIncrement(5);
+		cpds.setMaxPoolSize(20);
+		return cpds;
+	}
+2) Configures Hibernate as ORM
+Below Code is not required
+
+	@Bean 
+	public LocalContainerEntityManagerFactoryBean emf(DataSource ds) {
+		LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
+		emf.setDataSource(ds);
+		emf.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+		emf.setPackagesToScan("com.cisco.prj.entity");
+		
+		Properties props = new Properties();
+		props.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect"); // ORM to generate SQL to compatable to MySql8
+		props.setProperty("hibernate.hbm2ddl.auto", "update");
+		props.setProperty("hibernate.show_sql", "true");
+		props.setProperty("hibernate.format_sql", "true");
+		emf.setJpaProperties(props);
+		return emf;
+	}
+
+Simply put AppConfig.java is not required
+
+* Spring with WebMVC
+1) configures DispatcherServlet to url-pattern "*"
+
+AppInitializer.java is not required
+
+2) Configures Embedded Tomcat Container
+Below code is not required:
+<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>9.4.12.v20180830</version>
+</plugin>
+
+==========
+
+
+@SpringBootApplication
+public class OrderappApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(OrderappApplication.class, args);
+	}
+
+}
+
+
+SpringApplication.run ==> Create a Spring Container
+
+same as AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicaitonContext();
+
+
+ApplicationContext ctx = SpringApplication.run(OrderappApplication.class, args);
+
+
+@SpringBootApplication is 3 in one
+1) @ComponentScan ==> scan for @Component,@Repository, @Service, ... from "com.cisco.prj" and sub-package and creates instances
+
+2) @EnableAutoConfiguration
+creates lots of builtin configurations like DataSource, EntityManagerFactory, Tomcat,...
+
+3) @Configuration
+
+
+==============
+
+https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
+
+===
+
+Spring Data JPA 
+Spring Data JPA aims to significantly improve the implementation of data access layers by reducing the effort to the amount that's actually needed.Spring Data JPA provides repository support for the Java Persistence API (JPA).
+* we create interface; Spring DATA JPA generates @Repository classes based on interface
+
+public interface ProductDao extends JpaRepository<Product, Integer> {
+}
+
+Some of the Built-in methods:
+
+ T save(T entity);
+ Optional<T> findById(ID id);
+
+ 	List<T> findAll();
+ 	void deleteById(ID id);
+ 	void delete(T entity);
 
 
 
+JDBC ==> executeQuery("SELECT") and executeUpdate("INSERT / DELETE / UPDATE")
 
+
+========================
+
+ASM ==> Byte Code instrumentation
+
+CGLib, JavaAssist or Byte Buddy
+
+====================================
+
+
+Building RESTful Web services
+
+REST ==> Representational State Transfer
+Resources are on server; state of resource can be served to clients in variaous formats like JSON / XML / CSV / YML / ProtoBuf
+
+
+ 1 | iPhone 13      | 120000 |  499
+
+JSON ==> JavaScript Object Notation
+
+	{
+		"id": 1,
+		"name" : "iPhone 13",
+		"price" : 120000.00
+	} 
+
+XML 
+
+  <product>
+  	<id>1</id>
+  	<name>iPhone 13</name>
+  	<price>120000.00</price>
+  </product>
+
+
+REST depends on HTTP protocol
+
+Http REQUEST headers:
+
+Accept: application/json
+
+this header by client is sent to server to request representation in the form of "json"
+
+content-type: text/xml
+
+this header sent by client to inform server that payload sent by client contains xml
+
+===============
+
+REST uses URL to identify resources and HTTP methods for Verbs/ actions
+
+1) use plural nouns to identify the resource
+2) HTTP methods for CRUD operations
+
+Examples:
+
+1) GET
+http://localhost:8080/api/products
+
+to get all products
+
+2) GET
+http://localhost:8080/api/products/3
+
+get product whose id is "3"
+
+use pathparameter [ / ] to get a single resource based on ID / PK
+
+3) GET
+http://localhost:8080/api/products?page=3&size=20
+http://localhost:8080/api/products?category=mobile
+
+use Query parameters [ ? ] for filtering ==> sub-set
+
+4) POST
+http://localhost:8080/api/products
+
+payload contains new product data to be added to "products" resources
+
+
+5) PUT/ PATCH
+http://localhost:8080/api/products/2
+
+payload contains new product data to be update to "products" resources whose id is "2"
+
+
+6) DELETE
+http://localhost:8080/api/products/2
+
+delete a product resource whose id is "2"
+
+---
+
+GET, DELETE ==> no payload
+
+PUT/PATCH and POST ==> contains payload
+
+GET and DELETE are IDEMPOTENT ==> Safe methods
+
+PUT and POST are not IDEMPOTENT ==> Not Safe
+
+==============
+CRUD operations
+
+CREATE ===> POST
+READ ==> GET
+UPDATE ==> PUT / PATCH
+DELETE ==> DELETE
+
+=====================
+
+Traditional web applocation we use "verb based url" ==> addProduct.do, getProduct.do
+
+RESTful Web services always plural nouns
+http://localhost:8080/api/products
+http://localhost:8080/api/customers
+http://localhost:8080/api/orders
+
+===================================================
 
 
 
