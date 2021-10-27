@@ -1053,5 +1053,96 @@ Enterprise applicaiton ==> Distributed computing , EJB
 
 ===================
 
+Tomcat / Eclipse Jetty are Java Servlet container.
 
+
+============
+
+Resources running on Servlet Container / Servlet Engine / Web Container needs configuration
+
+class LoginServlet extends HttpServlet {
+	public doGet(HttpServletRequest req, HttpServletResponse res) {
+
+	}
+	public doPost(HttpServletRequest req, HttpServletResponse res) {
+
+	}
+}
+
+class RegisterServlet extends HttpServlet {
+	public doGet(HttpServletRequest req, HttpServletResponse res) {
+
+	}
+	public doPost(HttpServletRequest req, HttpServletResponse res) {
+
+	}
+}
+
+
+http://localhost:8080/login
+http://localhost:8080/register
+
+Deployment Descriptor for servlet engine: ==> web.xml
+
+<servlet>
+	<servlet-name>A</servlet-name>
+	<servlet-class>pkg.LoginServlet</servlet-class>
+</servlet>
+
+<servlet-mapping>
+		<servlet-name>A</servlet-name>
+		<url-pattern>/login</url-pattern>
+</servlet-mapping>
+
+<servlet>
+	<servlet-name>B</servlet-name>
+	<servlet-class>pkg.RegisterServlet</servlet-class>
+</servlet>
+
+<servlet-mapping>
+		<servlet-name>B</servlet-name>
+		<url-pattern>/register</url-pattern>
+</servlet-mapping>
+
+
+===
+
+Deployment Descriptor  using Annoations:
+
+@WebServlet("/login")
+class LoginServlet extends HttpServlet {
+	public doGet(HttpServletRequest req, HttpServletResponse res) {
+
+	}
+	public doPost(HttpServletRequest req, HttpServletResponse res) {
+
+	}
+}
+
+@WebServlet("/register")
+class RegisterServlet extends HttpServlet {
+	public doGet(HttpServletRequest req, HttpServletResponse res) {
+
+	}
+	public doPost(HttpServletRequest req, HttpServletResponse res) {
+
+	}
+}
+
+
+==========
+
+Spring Web MVC Module
+
+MVC ==> Model View Controller
+
+View ==> Presentation [ HTML, JSP, Theymeleaf]
+Model ==> Business data and business logic [ DAO , entity , service]
+Controller ==> Servlet acts as controller [ application logic]
+
+
+Run As ==> Maven Build ==> Goals 
+jetty:run
+
+===================
 

@@ -18,9 +18,11 @@ C:\Trainings WS\CISCO\JAVA\springdemo\src\main\java\com\cisco\prj\dao\OrderDaoJp
 C:\Trainings WS\CISCO\JAVA\springdemo\src\main\java\com\cisco\prj\dao\ProductDaoJpaImpl.java
 C:\Trainings WS\CISCO\JAVA\springdemo\src\main\java\com\cisco\prj\service\EmailService.java
 C:\Trainings WS\CISCO\JAVA\springdemo\src\main\java\com\cisco\prj\client\InsertProductClient.java
+C:\Trainings WS\CISCO\JAVA\springdemo\src\main\java\com\cisco\prj\cfg\AppInitializer.java
 C:\Trainings WS\CISCO\JAVA\springdemo\src\main\java\com\cisco\prj\dao\ProductDao.java
 C:\Trainings WS\CISCO\JAVA\springdemo\src\main\java\com\cisco\prj\dao\OrderDao.java
 C:\Trainings WS\CISCO\JAVA\springdemo\src\main\java\com\cisco\prj\entity\Item.java
 C:\Trainings WS\CISCO\JAVA\springdemo\src\main\java\com\cisco\prj\service\OrderService.java
+C:\Trainings WS\CISCO\JAVA\springdemo\src\main\java\com\cisco\prj\web\GreetingController.java
 C:\Trainings WS\CISCO\JAVA\springdemo\src\main\java\com\cisco\prj\service\AppService.java
 C:\Trainings WS\CISCO\JAVA\springdemo\src\main\java\com\cisco\prj\client\GetOrder.java
