@@ -1582,3 +1582,61 @@ Try CustomerController
 
 ============================
 
+ public interface OrderDao extends JpaRepository<Order, Integer>{
+
+	@Query("select new com.cisco.prj.dto.ReportDTO(o.oid, o.orderDate, o.total, c.email, c.firstName) from Order o inner join o.customer c")
+	List<ReportDTO> getReport();
+}
+
+
+@GetMapping("/report")
+	public @ResponseBody List<ReportDTO> getReport() {
+		return service.getReport();
+	}
+
+
+[{"oid":1,"orderDate":"2021-10-26T09:19:12.032+00:00","total":121950.0,"email":"gavin@cisco.com","firstName":"Gavin"},{"oid":2,"orderDate":"2021-10-28T05:03:28.318+00:00","total":173010.0,"email":"harry@cisco.com","firstName":"Harry"}]
+
+============
+
+AOP ==> Aspect Oriented Programming
+
+Why? ==> reduces cross-cutting concerns.
+
+Cross-cutting concerns leads to code tangling and code scattering
+
+public class BankingService {
+
+	public void transferFunds(...) {
+		long startTime = new Date().getTime();
+		logger.debug("method called!!!"); // log
+		if(isUserValid(user)) { // security
+			session.beginTransaction(); // transaction
+			 fromAcc.withdraw(amt); // businesslogic
+			 logger.debug("withdraw done");
+			 toAcc.deposit(amt);
+			 logger.debug("deposit done ...");
+			 ...
+		}
+		long endTime = new Date().getTime(); // profile
+		logger.debug( (endTime - startTime) + " ms") ;
+	}
+}
+
+Logging, Security, Profile, transactions ==> Aspects ==> A concern which can be used along with main logic
+Aspects results in ==>Cross-cutting concerns leads to code tangling and code scattering
+
+===========
+
+Aspect
+JoinPoint
+PointCut
+Advice ==> Before, After, Around, AfterThrowing, AfterReturning
+
+.w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MethodArgumentNotValidException: Validation failed for argument [0] in public org.springframework.http.ResponseEntity<com.cisco.prj.entity.Product> com.cisco.prj.api.ProductController.addProduct(com.cisco.prj.entity.Product) with 3 errors: 
+
+	[Field error in object 'product' on field 'price': rejected value [-34.0]; codes [Min.product.price,Min.price,Min.double,Min]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [product.price,price]; arguments []; default message [price],10]; default message [Price -34.0 should be more than 10]] 
+
+	[Field error in object 'product' on field 'quantity': rejected value [-100]; codes [Min.product.quantity,Min.quantity,Min.int,Min]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [product.quantity,quantity]; arguments []; default message [quantity],0]; default message [Quantity -100 should be more than 0]] 
+
+	[Field error in object 'product' on field 'name': rejected value []; codes [NotBlank.product.name,NotBlank.name,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [product.name,name]; arguments []; default message [name]]; default message [Name is required]] ]

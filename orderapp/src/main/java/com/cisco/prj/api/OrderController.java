@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cisco.prj.dto.ReportDTO;
 import com.cisco.prj.entity.Order;
 import com.cisco.prj.service.OrderService;
 
@@ -32,4 +33,8 @@ public class OrderController {
 		return service.getOrders();
 	}
 	
+	@GetMapping("/report")
+	public @ResponseBody List<ReportDTO> getReport() {
+		return service.getReport();
+	}
 }
