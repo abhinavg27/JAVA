@@ -11,8 +11,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.cisco.prj.dao.CustomerDao;
+import com.cisco.prj.dao.OrderDao;
 import com.cisco.prj.dao.ProductDao;
 import com.cisco.prj.entity.Customer;
+import com.cisco.prj.entity.Item;
+import com.cisco.prj.entity.Order;
 import com.cisco.prj.entity.Product;
 
 @Service
@@ -22,6 +25,27 @@ public class OrderService {
 	
 	@Autowired
 	private CustomerDao customerDao;
+	
+	@Autowired
+	private OrderDao orderDao;
+	
+	@Transactional
+	public Order placeOrder(Order o) {
+		List<Item> items = o.getItems();
+		double total = 0.0;
+		for(Item item : items) {
+			Product p = productDao.findById(item.getProduct().getId()).orElseThrow(); // client sends only product id
+			item.setAmount(p.getPrice() * item.getQty()); // add discount , tax
+			total += item.getAmount();
+			p.setQuantity(p.getQuantity() - item.getQty()); // Dirty checking ==> update SQL
+		}
+		o.setTotal(total);
+		return orderDao.save(o); // cascade saves items also
+	}
+	
+	public List<Order> getOrders() {
+		return orderDao.findAll();
+	}
 	
 	public Product addProduct(Product p) {
 		return productDao.save(p);

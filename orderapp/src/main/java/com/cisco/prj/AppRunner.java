@@ -10,7 +10,7 @@ import org.springframework.data.domain.Page;
 import com.cisco.prj.entity.Product;
 import com.cisco.prj.service.OrderService;
 
-@Configuration
+//@Configuration
 public class AppRunner implements CommandLineRunner {
 	@Autowired
 	private OrderService service;

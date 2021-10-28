@@ -1442,4 +1442,143 @@ http://localhost:8080/api/orders
 ===================================================
 
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.7.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.7.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-cache</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+
+=======================
+
+Day 3 Recap:
+
+Spring Boot project: simplifies Spring Framework
+
+@SpringBootApplication
+==> @ComponentScan
+==> @EnableAutoConfiguration [ DataSource, EMF, TomcatEmbeddedContainer, ...]
+
+Spring Data JPA:
+
+JpaRepository
+@Query ==> JPQL or SQL
+@Modifying ==> INSERT, UPDATE and DELETE SQL
+
+
+
+Day 4:
+
+-------
+RESTful Web Service
+
+Charactersitics of RESTful Web services:
+1) Client-server 
+2) Cachable ==> client side or on MiddleTier [ avoid hits to DB]
+3) Uniform URL
+4) Layered
+
+
+<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+This depedncy includes :
+1) Tomcat Embedded Web Container
+2) Spring MVC ==> DispatcherServlet is configured to handle "*"
+No need explict for WebApplicationInitializer
+3) HttpMessageHandler for JSON data
+
+Librarires for Java <--> JSON:
+	a) Jackson
+	b) Jettison
+	c) GSON ==> by Google
+	d) Moxy ==> Apcahe
+
+Jackson is configured as default HttpMessageConvertor for Java < -- > JSON
+
+
+client:
+GET
+http://localhost:8080/api/products
+
+Accept:application/json
+
+
+
+@GetMapping()
+	public @ResponseBody List<Product> getProducts() {
+		return service.getProducts();
+	}
+
+@ResponseBody ==> handles over List<Product> to Jackson to convert it into json
+
+Accept:text/xml
+
+
+@ResponseBody ==> handles over List<Product> to JAXB to convert it into xml
+
+=========================================
+
+
+GET
+http://localhost:8080/api/products/3
+
+POST
+http://localhost:8080/api/products
+
+content-type:application/json
+
+@RequestBody ==> JSON data is converted to Product
+
+(@RequestBody Product p)
+
+
+http://localhost:8080/api/products
+http://localhost:8080/api/products/2
+
+
+==========
+
+POST http://localhost:8080/api/orders
+
+body:
+
+{
+	"customer" : {"email": "harry@cisco.com"},
+	"items": [
+		{ "product": {"id": 5}, "qty" : 1},
+		{ "product": {"id": 4}, "qty" : 3},
+		{ "product": {"id": 1}, "qty" : 1}
+	]
+}
+
+
+==========
+
+Try CustomerController
+
+============================
 
