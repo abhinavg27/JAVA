@@ -1640,3 +1640,46 @@ Advice ==> Before, After, Around, AfterThrowing, AfterReturning
 	[Field error in object 'product' on field 'quantity': rejected value [-100]; codes [Min.product.quantity,Min.quantity,Min.int,Min]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [product.quantity,quantity]; arguments []; default message [quantity],0]; default message [Quantity -100 should be more than 0]] 
 
 	[Field error in object 'product' on field 'name': rejected value []; codes [NotBlank.product.name,NotBlank.name,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [product.name,name]; arguments []; default message [name]]; default message [Name is required]] ]
+
+	====================
+
+	REST Documentation
+	1) RAML ==> Rest API modeling Language ==> "yml" files
+	2) OpenAPI / Swagger ==> Api
+
+
+books.yml
+/books:
+  /{bookTitle}
+    get:
+      queryParameters:
+        author:
+          displayName: Author
+          type: string
+          description: An author's full name
+          example: Mary Roach
+          required: false
+        publicationYear:
+          displayName: Pub Year
+          type: number
+          description: The year released for the first time in the US
+          example: 1984
+          required: false
+        rating:
+          displayName: Rating
+          type: number
+          description: Average rating (1-5) submitted by users
+          example: 3.14
+          required: false
+        isbn:
+          displayName: ISBN
+          type: string
+          minLength: 10
+          example: 0321736079
+    put:
+      queryParameters:
+        access_token:
+          displayName: Access Token
+          type: string
+          description: Token giving you permission to make call
+          required: true
