@@ -1470,6 +1470,19 @@ http://localhost:8080/api/orders
 			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
 
+			<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+		</dependency>
+
+		management.endpoints.web.exposure.include=*
+
+management.metrics.distribution.percentiles-histogram.http.server.requests=true
 =======================
 
 Day 3 Recap:
@@ -1683,3 +1696,143 @@ books.yml
           type: string
           description: Token giving you permission to make call
           required: true
+
+======================================
+
+
+http://localhost:8080/swagger-ui.html#/
+
+==========================================================
+
+Unit testing RestControllers.
+
+<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+This enables below components/ libraries for testing:
+1) JUnit ==> Testing Framework [ TestNG ]
+2) Mockito ==> Mocking api
+3) Hamcrest ==> matchers / assertion
+4) jsonpath ==> to validate json response [https://jsonpath.com/]
+
+
+Unit Testing should not load entire spring managed beans
+
+@WebMvcTest(ProductController.class) loads only relevant code for testing and not entire configuration
+and loads only ProductController [ OrderController and CustomerController are not loaded in test bed created
+by Spring]
+
+@MockBean
+	private OrderService service; ==> creates a mock OrderService and not actual OrderService bean
+
+MockMvc mockMvc; ==> for making api calls [get / post / put / delete ]
+
+======================================================
+
+Caching
+
+HTTP headers: cache-control, expires, Etag
+
+Middle tier caching to avoid hits to Repository
+
+---
+
+@EnableCaching
+by default uses ConcurrentMapCacheManager
+
+@Cacheable(value="productCache", key = "#id")
+
+Input condition
+@Cacheable(value="productCache", key = "#p.id", condition="#p.price > 1000")
+
+
+Output Condition
+@Cacheable(value="productCache", key = "#id", unless="#result == null")
+
+update cache:
+@CachePut(value="productCache", key ="#id")
+
+REmove from cache
+@CacheEvict(value="productCache", key ="#id")
+
+@CacheEvict(value="productCache", allEntries="true")
+
+
+===
+
+@EnableScheduling
+
+
+@Scheduled(fixedRate = 1000)
+	public void doTask() {
+		System.out.println("do task!!!");
+	}
+
+
+@Scheduled(cron = "@daily")
+	public void doTask() {
+		System.out.println("do task!!!");
+	}
+
+	The following macros are also supported:
+
+"@yearly" (or "@annually") to run un once a year, i.e. "0 0 0 1 1 *",
+"@monthly" to run once a month, i.e. "0 0 0 1 * *",
+"@weekly" to run once a week, i.e. "0 0 0 * * 0",
+"@daily" (or "@midnight") to run once a day, i.e. "0 0 0 * * *",
+"@hourly" to run once an hour, i.e. "0 0 * * * *".
+
+
+
+ Example expressions:
+
+"0 0 * * * *" = the top of every hour of every day.
+"*/10 * * * * *" = every ten seconds.
+"0 0 8-10 * * *" = 8, 9 and 10 o'clock of every day.
+"0 0 6,19 * * *" = 6:00 AM and 7:00 PM every day.
+"0 0/30 8-10 * * *" = 8:00, 8:30, 9:00, 9:30, 10:00 and 10:30 every day.
+"0 0 9-17 * * MON-FRI" = on the hour nine-to-five weekdays
+"0 0 0 25 12 ?" = every Christmas Day at midnight
+"0 0 0 L * *" = last day of the month at midnight
+"0 0 0 L-3 * *" = third-to-last day of the month at midnight
+"0 0 0 1W * *" = first weekday of the month at midnight
+"0 0 0 LW * *" = last weekday of the month at midnight
+"0 0 0 * * 5L" = last Friday of the month at midnight
+"0 0 0 * * THUL" = last Thursday of the month at midnight
+"0 0 0 ? * 5#2" = the second Friday in the month at midnight
+"0 0 0 ? * MON#1" = the first Monday in the month at midnight
+
+
+
+Clear all entries:
+
+1)  @Scheduled(fixedDelay = 5000)
+	 @CacheEvict(value = "productCache", allEntries = true)
+	public void doTask() {
+	 
+	}
+
+2) @Autowired
+	CacheManager manager;
+	
+	@Scheduled(fixedDelay = 5000)
+	public void doTask() {
+		Collection<String> names = manager.getCacheNames();
+		for(String name : names) {
+			manager.getCache(name).clear();
+		}
+	}
+
+
+
+docker run --name my-redis -p 6379:6379 -d redis
+
+
+===
+
+Node.JS 
+
+npx redis-commander

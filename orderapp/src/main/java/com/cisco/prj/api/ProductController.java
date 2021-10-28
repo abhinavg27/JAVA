@@ -5,8 +5,12 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +30,8 @@ public class ProductController {
 	@Autowired
 	private OrderService service;
 	
+	 
+	
 	// http://localhost:8080/api/products?page=3&size=20
 	// http://localhost:8080/api/products
 	@GetMapping()
@@ -39,8 +45,15 @@ public class ProductController {
 	}
 	
 	//http://localhost:8080/api/products/3
+	@Cacheable(value="productCache", key = "#id")
 	@GetMapping("/{id}")
 	public @ResponseBody Product getProduct(@PathVariable("id") int id) {
+		System.out.println("Cache Miss !!");
+		try {
+			Thread.sleep(4000);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
 		try {
 			return service.getById(id);
 		} catch (Exception e) {
@@ -48,16 +61,22 @@ public class ProductController {
 		}
 	}
 	
+	@Cacheable(value="productCache", key = "#p.id")
 	@PostMapping()
 	public ResponseEntity<Product> addProduct(@RequestBody @Valid Product p) {
 		p = service.addProduct(p);
 		return new ResponseEntity<Product>(p, HttpStatus.CREATED);
 	}
 	
+	@CachePut(value="productCache", key ="#id")
 	@PutMapping("/{id}")
 	public @ResponseBody Product updateProduct(@PathVariable("id") int id, @RequestBody Product p) {
 		return service.modifyProduct(p.getPrice(), id);
 	}
 	
-	
+	@CacheEvict(value="productCache", key ="#id")
+	@DeleteMapping("/{id}")
+	public String deleteProduct(@PathVariable("id") int id) {
+		return "deleted!!!";
+	}
 }
