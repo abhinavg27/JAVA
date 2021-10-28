@@ -1836,3 +1836,34 @@ docker run --name my-redis -p 6379:6379 -d redis
 Node.JS 
 
 npx redis-commander
+
+=============
+	
+	<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+
+  Actuator is mainly used to expose operational information about the running application — health, metrics, info, dump, env, etc. 
+
+  Prometheus / Graffana
+
+Time-series database
+scrape information timely from actuator
+and report
+
+172.31.112.1
+
+docker run -d --name=prometheus -p 9090:9090 -v C:\prometheus\prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus --config.file=/etc/prometheus/prometheus.yml
+
+
+
+jvm_threads_live_threads
+jvm_threads_peak_threads
+jvm_threads_states_threads
+http_server_requests_seconds_count ==> is the total number of request recevied
+http_server_requests_seconds_sum ==> duration of every request recevied
+
+=================
+
