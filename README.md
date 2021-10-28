@@ -1859,11 +1859,24 @@ docker run -d --name=prometheus -p 9090:9090 -v C:\prometheus\prometheus.yml:/et
 
 
 
+
+
+prometheus.yml
+rules.yml
+start.txt
+
+http://localhost:9090
+
+try below expression / Graph:
 jvm_threads_live_threads
 jvm_threads_peak_threads
 jvm_threads_states_threads
 http_server_requests_seconds_count ==> is the total number of request recevied
 http_server_requests_seconds_sum ==> duration of every request recevied
+
+
+Check "Alert" tab after making many requests to "api/products"
+
 
 =================
 
