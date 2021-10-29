@@ -1877,6 +1877,14 @@ http_server_requests_seconds_sum ==> duration of every request recevied
 
 Check "Alert" tab after making many requests to "api/products"
 
-
 =================
+
+EntityGraph, Specification API
+
+HATEAOS, Security, Simple MicroService
+
+========================================
+
+
+
 
