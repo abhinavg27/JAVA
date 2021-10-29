@@ -2099,15 +2099,119 @@ http://localhost:8080/logout
 http://localhost:8080/login
 
 =================
+application.properties
 instead of default user with generated password
 spring.security.user.name=banu
 spring.security.user.password=test123
 
 ===================
 
-Resume @ 2:00
+Servlet API Filter ==> Interceptor Pattern
+
+DelegatingFilterProxy is Filter ==> intercept all requests from client
+
+POSTMAN
+
+POST : http://localhost:8080/login
+
+body 
+
+{
+	username : "..",
+	password : ".."
+}
+ 
+
+UsernamePasswordAuthenticationFiler ==> attemptAuthentication() ==> creates Authentication Object with the following detais:
+1) priciple ==> username from request
+2) credentials ==> password from request
+3) authencicated ==> false
+4) roles ==> Empty
+
+--
+Authenication object is passed to AuthenticationManager.
+
+Different AuthenticationProvider ==> Access UserDetailsService implemented by InMemory, JDBC, LDAP, Custom
+
+UserDetailsService==> returns UserDetails ==> update Authentication object
+
+Authentication Object contains now : 
+1) priciple ==> username from request
+2) credentials ==> null
+3) authencicated ==> true
+4) roles ==> ADMIN, USER
+
+Authentication will be stored in SecurityContext; each instance is mapped with JSESSIONID which is sent to client via cookie
+
+From now on client is going to pass cookie with JSESSIONID; using JSESSIONID presting in SecurityContext server identifies client/ roles
+
+---------------
 
 
+JDBCAuthenticationManager
+
+Security ==>
+1) Authentication
+2) Authorization
+3) Exception Handling
+
+JSESSIONID 2ACAD7C1D711D113951A20F60143C3F3
+
+=====================================================
+
+MicroServices
+
+Monolithic applications contains all modules deployed on single server
+==> Compromised on data storage
+	==> Some places we need RDBMS / NoSQL ==> MongoDB / GeoSpatial DB ==> lat long
+
+==> Scalaing indivvidual module is difficult
+	ProductModule
+	CartModule
+	CustomeModule
+
+
+Netflix OSS:
+
+Eureka Server is an application that holds the information about all client-service applications. 
+Every Micro service will register into the Eureka server and Eureka server knows all the client applications running on each port and IP address. 
+Eureka Server is also known as Discovery Server.
+
+
+
+
+OpenFeign ==> declarative way of invoking APIs from Spring Boot Cloud applicaiton;
+Alternate: Programatic
+
+RestTemplate
+
+Review revivew = template.getForEntity("uri", Review.class);
+
+==================================================================
+
+Step:
+1) start Discover-Server ==> Eureka @EnableEurekaServer
+application.properties
+server.port=8761
+
+Monitor
+http://localhost:8761/
+
+
+2) start other services
+2.1) Review Services
+
+check Eureka Dashboard
+
+2.2) Movie Service
+check Eureka Dashboard
+
+http://localhost:8082/api/movies/1
+
+MovieService is making API call to ReviewServices uing Feign client [ declarative interface]
+
+
+============================================================
 
 
 
