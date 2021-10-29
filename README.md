@@ -1967,11 +1967,145 @@ Spring Data REST:
 
 <dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-rest</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+* create entites and JPARepository interfaces; No need for @Controller / @RestController
+
+
+
+=================================
+
+
+HATEOAS ==> Domain Object + Links ==> WebMvcLinkBuilder for creating links with relationaship
+[ linkTo and affordance ( exposes HTTP method also)]
+
+EntityModel ==> Wrap Entity + Links
+CollectionModel ==> Wrap entity collectiosn + links
+
+Spring Data REST
+* Spring DATA JPA repositories + HATEOAS
+* No need for writing RestControllers
+* can override endpoints using @BasePathAwareController and use @RequestMapping
+
+=================================================
+
+* Entity Graph
+
+Flyway is an open-source database-migration tool.
+
+Without Flyway:
+resources:
+schema.sql
+ contains CREATE, ALTER, DROP table commands
+data.sql
+  DML like INSERT , SELECT
+
+companyWithDepartmentsGraph:
+
+select
+        company0_.id as id1_2_0_,
+        company0_.name as name2_2_0_,
+        department1_.company_id as company_3_3_1_,
+        department1_.id as id1_3_1_,
+        department1_.id as id1_3_2_,
+        department1_.company_id as company_3_3_2_,
+        department1_.name as name2_3_2_ 
+    from
+        company company0_ 
+    left outer join
+        department department1_ 
+            on company0_.id=department1_.company_id 
+    where
+        company0_.id=?
+
+---
+
+companyWithDepartmentsAndEmployeesGraph:
+
+ select
+        company0_.id as id1_2_0_,
+        company0_.name as name2_2_0_,
+        department1_.company_id as company_3_3_1_,
+        department1_.id as id1_3_1_,
+        department1_.id as id1_3_2_,
+        department1_.company_id as company_3_3_2_,
+        department1_.name as name2_3_2_,
+        employees2_.department_id as departme5_4_3_,
+        employees2_.id as id1_4_3_,
+        employees2_.id as id1_4_4_,
+        employees2_.address_id as address_4_4_4_,
+        employees2_.department_id as departme5_4_4_,
+        employees2_.name as name2_4_4_,
+        employees2_.surname as surname3_4_4_ 
+    from
+        company company0_ 
+    left outer join
+        department department1_ 
+            on company0_.id=department1_.company_id 
+    left outer join
+        employee employees2_ 
+            on department1_.id=employees2_.department_id 
+    where
+        company0_.id=?
+
+  =============
+
+
+ JPA Specification API.
+
+ is built on Criteria API [ OO way of Querying data instead of SQL / jPQL ]
+
+
+
+Spring Data JPA Specifications is yet another tool at our disposal to perform database queries with Spring or Spring Boot. 
+Using Specifications we can build atomic predicates, and combine those predicates to build complex dynamic queries.
+
+=============================
+
+Spring Security
+
+=====
+
+<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
 </dependency>
 
+* By including securty dependencies out of the box all resources are secured;
+* By default it created user with name as "user" and password is generated;
+Using generated security password: e3c6bca7-579f-4030-964b-c43f02de9abb
 
+* Login and Logout pages are created
 
+=====================
+
+http://localhost:8080/logout
+
+http://localhost:8080/login
+
+=================
+instead of default user with generated password
+spring.security.user.name=banu
+spring.security.user.password=test123
+
+===================
+
+Resume @ 2:00
 
 
 
