@@ -1886,5 +1886,95 @@ HATEAOS, Security, Simple MicroService
 ========================================
 
 
+Day 4 Recap:
+
+1) RESTful Web services
+	@RestController, @ResponseBody [ Java --> JSON], @RequestBody [ json --> java], 
+	@RequestMapping [ Biding URL (generally plural nouns to a resource/controller)]
+	@GetMapping(), @PostMapping(), @PutMapping(), @DeleteMapping()
+	@PathVariable [ Path parameter ], @RequestParam [ Query parameter]
+	ResponseEntity
+
+2) 
+	AOP ==> 
+	Aspect a concrent which leads to code tangling and code scattering
+	Advice and Pointcut to select JoinPoint
+	
+	@ControllerAdvice ==> Any exception in Controller/RestController if not handled will be delegated to @ControllerAdvice
+	@ExceptionHandler for methods to handle specific exception
+
+	Validation ==> javax.validation.constraints [@Min, @Max, @NotBlank, @Future, @Past, @Pattern]
+
+	for method parameter (@RequestBody @Valid Product p)
+
+	This throws MethodArgumentNotValidException ==> handled in ControllerAdvice
+
+3) Swagger OpenAPI to document RESTful Web services endpoint
+
+4) Caching ==> ConcurrentHashMap for Caching; Redis as CacheManager / EHCache/ JBoss Swarm Cache
+
+@EnableCaching
+@Cacheable
+@CachePut
+@CacheEvit
+
+@EnableScheduling and @Scheduled( fixedDelay / cron )
+
+5) Actuator ==> exposes different metrics like health, info, env, dump of heap/threads/cpu
+	Prometheus ==> Time series database which scrape the information exposed by Actutaor and gives Data Visualization / Alert
+jvm_threads_live_threads
+jvm_threads_peak_threads
+jvm_threads_states_threads
+http_server_requests_seconds_count ==> is the total number of request recevied
+http_server_requests_seconds_sum ==> duration of every request recevied
+
+execution("* *.*(..)") <== Avoid this when used with framework; This applies to built-in frameworks classes; Many a times PRoxying is not allowed
+
+execution("public * pkg.class.method(arguments)")
+
+===============================================
+
+Day 5:
+
+HATEAOS ==> Hypermedia As The Engine of Application State
+
+http://amazon.com/banu@gmail.com/cart
+
+I get Cart Items
+	We need to provide links along with state [ JSON /XML ] for
+	a) checkout
+	b) clear
+	c) remove item from cart
+	...
+	RepresentationModel
+	EntityModel:
+	A simple  wrapping a domain object and adding links to it.
+	CollectionModel:
+	A simple  wrapping a colelction entities and adding links to it.
+
+WebMvcLinkBuilder:
+Builder to ease building {@link Link} instances pointing to Spring MVC controllers.
+
+
+--------------------------
+
+Comment Swagger Dependicies and SwaggerConfig.java
+
+========
+
+Spring Data REST:
+ makes it easy to build hypermedia-driven REST web services
+
+<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-rest</artifactId>
+</dependency>
+
+
+
+
+
+
+
 
 

@@ -3,9 +3,12 @@ package com.cisco.prj;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.hateoas.config.EnableHypermediaSupport;
+import org.springframework.hateoas.config.EnableHypermediaSupport.HypermediaType;
 
 @SpringBootApplication
 @EnableCaching
+@EnableHypermediaSupport(type = HypermediaType.HAL_FORMS)
 //@EnableScheduling
 public class OrderappApplication {
 	

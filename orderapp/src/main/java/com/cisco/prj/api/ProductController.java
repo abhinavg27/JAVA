@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,13 +25,29 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cisco.prj.entity.Product;
 import com.cisco.prj.service.OrderService;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.afford;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping("api/products")
 public class ProductController {
 	@Autowired
 	private OrderService service;
-	
-	 
+	// http://localhost:8080/api/products/hateoas/3
+	@GetMapping("/{id}")
+	public ResponseEntity<EntityModel<Product>> findOne(@PathVariable("id") int id) {
+		Product p = service.getById(id);
+		EntityModel<Product> em = EntityModel.of(p,
+				linkTo(methodOn(ProductController.class).findOne(id)).withSelfRel()
+				.andAffordance(afford(methodOn(ProductController.class).updateProduct(p.getId(), null)))
+//				.andAffordance(afford(methodOn(ProductController.class).deleteProduct(id)))
+				,
+				linkTo(methodOn(ProductController.class).getProducts(0, 0)).withRel("products")
+				);
+		
+		return ResponseEntity.ok(em);
+	}
 	
 	// http://localhost:8080/api/products?page=3&size=20
 	// http://localhost:8080/api/products
@@ -45,21 +62,21 @@ public class ProductController {
 	}
 	
 	//http://localhost:8080/api/products/3
-	@Cacheable(value="productCache", key = "#id")
-	@GetMapping("/{id}")
-	public @ResponseBody Product getProduct(@PathVariable("id") int id) {
-		System.out.println("Cache Miss !!");
-		try {
-			Thread.sleep(4000);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
-		try {
-			return service.getById(id);
-		} catch (Exception e) {
-			throw new IllegalArgumentException("Product with id : " + id + " doesn't exist");
-		}
-	}
+//	@Cacheable(value="productCache", key = "#id")
+//	@GetMapping("/{id}")
+//	public @ResponseBody Product getProduct(@PathVariable("id") int id) {
+//		System.out.println("Cache Miss !!");
+//		try {
+//			Thread.sleep(4000);
+//		} catch (InterruptedException e1) {
+//			e1.printStackTrace();
+//		}
+//		try {
+//			return service.getById(id);
+//		} catch (Exception e) {
+//			throw new IllegalArgumentException("Product with id : " + id + " doesn't exist");
+//		}
+//	}
 	
 	@Cacheable(value="productCache", key = "#p.id")
 	@PostMapping()
